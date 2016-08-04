@@ -27,6 +27,15 @@ entities and interactors). By structuring things this way, we decouple the
 primary application logic from delivery and data persistence mechanisms, and
 thereby allow maximum flexibility in how this application is installed.
 
+## Basic Workflow (v 0.1.0)
+1. Script Trigger (cron, UI button, whatever)
+2. Pass in date of last check
+3. Workflow script
+	A. Queries CVE Datasource for vulnerabilities since {{date}}
+	B. Queries local config for list of technologies to watch for
+	C. Matches any new CVEs against the watch list
+	D. Sends alerts for any matches
+
 # Contributing
 Welcome! We're happy to have you. 
 
