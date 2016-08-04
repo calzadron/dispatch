@@ -31,10 +31,10 @@ thereby allow maximum flexibility in how this application is installed.
 1. Script Trigger (cron, UI button, whatever)
 2. Pass in date of last check
 3. Workflow script
-	A. Queries CVE Datasource for vulnerabilities since {{date}}
-	B. Queries local config for list of technologies to watch for
-	C. Matches any new CVEs against the watch list
-	D. Sends alerts for any matches
+	* Queries CVE Datasource for vulnerabilities since {{date}}
+	* Queries local config for list of technologies to watch for
+	* Matches any new CVEs against the watch list
+	* Sends alerts for any matches
 
 # Contributing
 Welcome! We're happy to have you. 
