@@ -2,7 +2,7 @@
 There aren't any good options for keeping track of CVE notifications,
 and getting alerted about only those CVEs that affect you and your stack.
 This project attempts to provide a mechanism for subscribing to CVE feeds,
-and selectivly alert you (or your team) about CVEs that impact you.
+and selectively alerting you (or your team) about CVEs that impact you.
 
 ## Roadmap
 1. Develop dispatch-core
