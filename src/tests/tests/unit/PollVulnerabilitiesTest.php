@@ -13,7 +13,7 @@ use dispatch\core\interfaces\VulnerabilityPoller;
 class PollVulnerabilitiesTest extends TestCase
 {
 	/**
-	 * @testdox The PollVulnerabilities class is instantiable
+	 * @testdox PollVulnerabilities is instantiable
 	 */
 	public function testPollVulnerabilitiesIsInstantiable()
 	{
@@ -23,7 +23,7 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
-	 * @testdox The PollVulnerabilities class implements the VulnerabilityPoller interface
+	 * @testdox PollVulnerabilities implements the VulnerabilityPoller interface
 	 */
 	public function testPollVulnerabilitiesImplementsVulnerabilityPoller()
 	{
@@ -33,7 +33,15 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
-	 * @testdox The pollDateRange() method requests vulnerabilites from the datasource
+	 * @testdox pollDateRange() throws MissingLogicalDependencyException if missing a dependency
+	 */
+	public function testPollDateRangeThrowsMissingLogicalDependencyWhenMissingDependency()
+	{
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * @testdox pollDateRange() requests vulnerabilites from the datasource
 	 */
 	public function testPollDateRangePollsVulnerabilityDataSourceDateRange()
 	{
@@ -41,7 +49,7 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
-	 * @testdox The pollDateRange() method checks all vulnerabilities for a match
+	 * @testdox pollDateRange() checks all vulnerabilities for a match
 	 */
 	public function testPollDateRangeChecksReturnedVulnerabilitiesForMatch()
 	{
@@ -49,7 +57,7 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
-	 * @testdox The pollDateRange() method handles all matches
+	 * @testdox pollDateRange() handles all matches
 	 */
 	public function testPollDateRangeHandlesMatchesForMatchingVulnerabilities()
 	{
