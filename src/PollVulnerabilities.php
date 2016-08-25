@@ -17,13 +17,6 @@ use dispatch\core\interfaces\VulnerabilityMatcher;
 class PollVulnerabilities implements VulnerabilityPoller
 {
 	/**
-	 * @param dispatch\core\interfaces\MatchHandler $matchHandler
-	 */
-	public function addMatchHandler(MatchHandler $matchHandler)
-	{
-	}
-
-	/**
 	 * @param dispatch\core\interfaces\VulnerabilityDataSource $dataSource
 	 */
 	public function addVulnerabilityDataSource(
@@ -35,6 +28,15 @@ class PollVulnerabilities implements VulnerabilityPoller
 	 * @param dispatch\core\interfaces\VulnerabilityMatcher $matcher
 	 */
 	public function addVulnerabilityMatcher(VulnerabilityMatcher $matcher)
+	{
+	}
+
+	/**
+	 * @param string $startDate  Start date of the date range to poll, in YYYY-MM-DD
+	 * @param string $endDate  End date of the date range to poll, in YYYY-MM-DD
+	 * @return dispatch\core\interfaces\data\VulnerabilityCollection
+	 */
+	public function pollDateRange($startDate, $endDate)
 	{
 	}
 }
