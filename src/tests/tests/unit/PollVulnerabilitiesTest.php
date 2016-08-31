@@ -63,6 +63,26 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
+	 * @testdox pollDateRange() requests vulnerabilites from the datasource
+	 */
+	public function testPollDateRangePollsVulnerabilityDataSourceDateRange()
+	{
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * @testdox pollDateRange() checks all vulnerabilities for a match
+	 */
+	public function testPollDateRangeChecksReturnedVulnerabilitiesForMatch()
+	{
+		$this->markTestIncomplete();
+	}
+
+	/*******************
+	** DATA PROVIDERS **
+	*******************/
+
+	/**
 	 * @return array
 	 */
 	public function providerRequiredLogicalDependencyInjectionMethods()
@@ -73,40 +93,9 @@ class PollVulnerabilitiesTest extends TestCase
 		);
 	}
 
-	/**
-	 * @return array
-	 */
-	protected function getAllInjectionMethods()
-	{
-		$injectionMethods = $this->providerRequiredLogicalDependencyInjectionMethods();
-
-		$injectionMethodsFlat = array();
-		foreach ($injectionMethods as $injectionMethod) {
-			$injectionMethodsFlat[] = $injectionMethod[0];
-		}
-
-		return $injectionMethodsFlat;
-	}
-
-	/**
-	 * @param string $injectionMethod
-	 * @return mixed
-	 */
-	protected function getMockByInjectionMethod($injectionMethod)
-	{
-		$mock = null;
-
-		switch ($injectionMethod) {
-			case 'addVulnerabilityDataSource':
-				$mock = $this->getVulnerabilityDataSourceMock();
-				break;
-			case 'addVulnerabilityMatcher':
-				$mock = $this->getVulnerabilityMatcherMock();
-				break;
-		}
-
-		return $mock;
-	}
+	/************************
+	** MOCK/STUB PROVIDERS **
+	************************/
 
 	/**
 	 * @return \dispatch\core\interfaces\VulnerabilityDataSource
@@ -129,18 +118,41 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
-	 * @testdox pollDateRange() requests vulnerabilites from the datasource
+	 * @param string $injectionMethod
+	 * @return mixed
 	 */
-	public function testPollDateRangePollsVulnerabilityDataSourceDateRange()
+	protected function getMockByInjectionMethod($injectionMethod)
 	{
-		$this->markTestIncomplete();
+		$mock = null;
+
+		switch ($injectionMethod) {
+			case 'addVulnerabilityDataSource':
+				$mock = $this->getVulnerabilityDataSourceMock();
+				break;
+			case 'addVulnerabilityMatcher':
+				$mock = $this->getVulnerabilityMatcherMock();
+				break;
+		}
+
+		return $mock;
 	}
 
+	/************************
+	** MISC HELPER METHODS **
+	************************/
+
 	/**
-	 * @testdox pollDateRange() checks all vulnerabilities for a match
+	 * @return array
 	 */
-	public function testPollDateRangeChecksReturnedVulnerabilitiesForMatch()
+	protected function getAllInjectionMethods()
 	{
-		$this->markTestIncomplete();
+		$injectionMethods = $this->providerRequiredLogicalDependencyInjectionMethods();
+
+		$injectionMethodsFlat = array();
+		foreach ($injectionMethods as $injectionMethod) {
+			$injectionMethodsFlat[] = $injectionMethod[0];
+		}
+
+		return $injectionMethodsFlat;
 	}
 }
