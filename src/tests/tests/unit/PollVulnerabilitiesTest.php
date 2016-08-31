@@ -59,7 +59,10 @@ class PollVulnerabilitiesTest extends TestCase
 			'\dispatch\core\exceptions\MissingLogicalDependencyException'
 		);
 
-		$Poller->pollDateRange(date('Y-m-d'), date('Y-m-d'));
+		$startDate = new \DateTime('-1 week');
+		$endDate = new \DateTime('now');
+
+		$Poller->pollDateRange($startDate, $endDate);
 	}
 
 	/**
@@ -67,7 +70,25 @@ class PollVulnerabilitiesTest extends TestCase
 	 */
 	public function testPollDateRangePollsVulnerabilityDataSourceDateRange()
 	{
-		$this->markTestIncomplete();
+		$VulnerabilityDataSource = $this->getVulnerabilityDataSourceMock();
+
+		$startDate = new \DateTime('-1 week');
+		$endDate = new \DateTime('now');
+
+		$VulnerabilityDataSource->expects($this->once())
+			->method('getVulnerabilitiesInDateRange')
+			->with(
+				$startDate,
+				$endDate
+			);
+
+		$Poller = $this->getPollerContainingDependencies(
+			array(
+				'addVulnerabilityDataSource' => $VulnerabilityDataSource
+			)
+		);
+
+		$Poller->pollDateRange($startDate, $endDate);
 	}
 
 	/**
@@ -96,6 +117,28 @@ class PollVulnerabilitiesTest extends TestCase
 	/************************
 	** MOCK/STUB PROVIDERS **
 	************************/
+
+	/**
+	 * @param array $mocks = array()
+	 * @return \dispatch\core\PollVulnerabilities
+	 */
+	protected function getPollerContainingDependencies($mocks = array())
+	{
+		$Poller = new PollVulnerabilities();
+
+		foreach ($this->getAllInjectionMethods() as $injectionMethod) {
+			if (array_key_exists($injectionMethod, $mocks)) {
+				$injector = $mocks[$injectionMethod];
+
+			} else {
+				$injector = $this->getMockByInjectionMethod($injectionMethod);
+			}
+
+			$Poller->$injectionMethod($injector);
+		}
+
+		return $Poller;
+	}
 
 	/**
 	 * @return \dispatch\core\interfaces\VulnerabilityDataSource

@@ -18,12 +18,16 @@ use dispatch\core\exceptions\MissingLogicalDependencyException;
 
 class PollVulnerabilities implements VulnerabilityPoller
 {
+	protected $VulnerabilityDataSource;
+	protected $VulnerabilityMatcher;
+
 	/**
 	 * @param dispatch\core\interfaces\VulnerabilityDataSource $dataSource
 	 */
 	public function addVulnerabilityDataSource(
 		VulnerabilityDataSource $dataSource
 	) {
+		$this->VulnerabilityDataSource = $dataSource;
 	}
 
 	/**
@@ -31,16 +35,40 @@ class PollVulnerabilities implements VulnerabilityPoller
 	 */
 	public function addVulnerabilityMatcher(VulnerabilityMatcher $matcher)
 	{
+		$this->VulnerabilityMatcher = $matcher;
 	}
 
 	/**
-	 * @param string $startDate  Start date of the date range to poll, in YYYY-MM-DD
-	 * @param string $endDate  End date of the date range to poll, in YYYY-MM-DD
+	 * @param \DateTime $startDate
+	 * @param \DateTime $endDate
 	 * @return dispatch\core\interfaces\data\VulnerabilityCollection
+	 */
+	public function pollDateRange(\DateTime $startDate, \DateTime $endDate)
+	{
+		$this->checkMissingDependencies();
+
+		$this->VulnerabilityDataSource->getVulnerabilitiesInDateRange(
+			$startDate,
+			$endDate
+		);
+	}
+
+	/**
 	 * @throws dispatch\core\exceptions\MissingLogicalDependencyException
 	 */
-	public function pollDateRange($startDate, $endDate)
+	protected function checkMissingDependencies()
 	{
-		throw new MissingLogicalDependencyException();
+		$logicalDependencies = array (
+			'VulnerabilityDataSource',
+			'VulnerabilityMatcher'
+		);
+
+		foreach ($logicalDependencies as $logicalDependency) {
+			if (!$this->$logicalDependency) {
+				throw new MissingLogicalDependencyException(
+					'Logical Dependency '.$logicalDependency.' is missing.'
+				);
+			}
+		}
 	}
 }
