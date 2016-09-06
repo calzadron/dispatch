@@ -18,7 +18,7 @@ use dispatch\core\exceptions\MissingLogicalDependencyException;
 
 class PollVulnerabilities implements VulnerabilityPoller
 {
-	protected $VulnerabilityDataSource;
+	protected $VulnerabilityDataSources = array();
 	protected $VulnerabilityMatcher;
 
 	/**
@@ -27,7 +27,7 @@ class PollVulnerabilities implements VulnerabilityPoller
 	public function addVulnerabilityDataSource(
 		VulnerabilityDataSource $dataSource
 	) {
-		$this->VulnerabilityDataSource = $dataSource;
+		$this->VulnerabilityDataSources[] = $dataSource;
 	}
 
 	/**
@@ -47,10 +47,12 @@ class PollVulnerabilities implements VulnerabilityPoller
 	{
 		$this->checkMissingDependencies();
 
-		$this->VulnerabilityDataSource->getVulnerabilitiesInDateRange(
-			$startDate,
-			$endDate
-		);
+		foreach ($this->VulnerabilityDataSources as $VulnerabilityDataSource){
+			$VulnerabilityDataSource->getVulnerabilitiesInDateRange(
+				$startDate,
+				$endDate
+			);
+		}
 	}
 
 	/**
@@ -59,7 +61,7 @@ class PollVulnerabilities implements VulnerabilityPoller
 	protected function checkMissingDependencies()
 	{
 		$logicalDependencies = array (
-			'VulnerabilityDataSource',
+			'VulnerabilityDataSources',
 			'VulnerabilityMatcher'
 		);
 

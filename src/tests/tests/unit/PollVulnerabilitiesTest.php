@@ -66,16 +66,23 @@ class PollVulnerabilitiesTest extends TestCase
 	}
 
 	/**
-	 * @testdox pollDateRange() requests vulnerabilites from the datasource
+	 * @testdox pollDateRange() requests vulnerabilites from all datasources
 	 */
-	public function testPollDateRangePollsVulnerabilityDataSourceDateRange()
+	public function testPollDateRangePollsAllVulnerabilityDataSourceDateRange()
 	{
-		$VulnerabilityDataSource = $this->getVulnerabilityDataSourceMock();
-
 		$startDate = new \DateTime('-1 week');
 		$endDate = new \DateTime('now');
 
-		$VulnerabilityDataSource->expects($this->once())
+		$VulnerabilityDataSourceOne = $this->getVulnerabilityDataSourceMock();
+		$VulnerabilityDataSourceOne->expects($this->once())
+			->method('getVulnerabilitiesInDateRange')
+			->with(
+				$startDate,
+				$endDate
+			);
+
+		$VulnerabilityDataSourceTwo = $this->getVulnerabilityDataSourceMock();
+		$VulnerabilityDataSourceTwo->expects($this->once())
 			->method('getVulnerabilitiesInDateRange')
 			->with(
 				$startDate,
@@ -84,7 +91,10 @@ class PollVulnerabilitiesTest extends TestCase
 
 		$Poller = $this->getPollerContainingDependencies(
 			array(
-				'addVulnerabilityDataSource' => $VulnerabilityDataSource
+				'addVulnerabilityDataSource' => array(
+					$VulnerabilityDataSourceOne,
+					$VulnerabilityDataSourceTwo
+				)
 			)
 		);
 
@@ -128,13 +138,17 @@ class PollVulnerabilitiesTest extends TestCase
 
 		foreach ($this->getAllInjectionMethods() as $injectionMethod) {
 			if (array_key_exists($injectionMethod, $mocks)) {
-				$injector = $mocks[$injectionMethod];
+				$injectables = $mocks[$injectionMethod];
 
 			} else {
-				$injector = $this->getMockByInjectionMethod($injectionMethod);
+				$injectables = array(
+					$this->getMockByInjectionMethod($injectionMethod)
+				);
 			}
 
-			$Poller->$injectionMethod($injector);
+			foreach ($injectables as $injectable) {
+				$Poller->$injectionMethod($injectable);
+			}
 		}
 
 		return $Poller;
